@@ -65,6 +65,14 @@ async function run() {
       //send response to client
       res.send(result);
     })
+    //to update coffee data we need a specific data of that using id
+    app.get('/coffee/:id', async(req, res)=>{
+      const id = req.params.id;
+      // using the line below this can able to find data from mongodb 
+      const query = {_id: new ObjectId(id)};
+      const result = await coffeeCollection.findOne(query);
+      res.send(result);
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
