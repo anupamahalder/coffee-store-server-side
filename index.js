@@ -38,6 +38,15 @@ async function run() {
     await client.connect();
     const coffeeCollection = client.db('coffeeDB').collection('coffee'); 
 
+    // Read data from database
+    app.get('/coffee', async(req, res)=>{
+      // setting a pointer to our coffeeCollection and find with no parameter
+      const cursor = coffeeCollection.find();
+      // make all items in an array 
+      const result = await cursor.toArray();
+      // send the response to client 
+      res.send(result);
+    })
     // create a post api to send data from client to server 
     app.post('/coffee',async(req,res)=>{
         const newCoffee = req.body;
