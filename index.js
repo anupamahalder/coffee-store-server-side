@@ -98,7 +98,7 @@ async function run() {
     })
 
     // --------------------user related API's----------------------
-     
+
     app.post('/user',async(req, res)=>{
       // take data which come from client side 
       const user = req.body;
@@ -108,6 +108,16 @@ async function run() {
       // send result as a response to client 
       res.send(result); 
     })
+
+    // To give user related information to read from client we need GET operation 
+    app.get('/user',async(req, res)=>{
+      const cursor = userCollection.find();
+      const users = await cursor.toArray();
+      // send response to client with array of objects 
+      res.send(users);
+    })
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
