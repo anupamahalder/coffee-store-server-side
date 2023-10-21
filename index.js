@@ -116,8 +116,30 @@ async function run() {
       // send response to client with array of objects 
       res.send(users);
     })
-
-
+    //delete operation for a specific user id
+    app.delete('/user/:id', async(req, res)=>{
+      // get id using params 
+      const id = req.params.id;
+      // to make understand this id to mongodb we will create query which will be an object and object will touch which field (object will target _id from database)
+      const query = {_id: new ObjectId(id)};
+      // deleteOne based on query 
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+    })
+    // update data of logged at 
+    app.patch('/user', async(req, res)=>{
+      // client side will send user 
+      const user = req.body;
+      // email is unique for each user 
+      const filter = {email: user.email};
+      const updatedDoc = {
+        $set:{
+          lastLoggedAt: user.lastLoggedAt
+        }
+      }
+      const result = await userCollection.updateOne(filter, updatedDoc);
+      res.send(result);
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
